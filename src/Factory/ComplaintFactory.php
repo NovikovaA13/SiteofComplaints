@@ -27,7 +27,7 @@ final class ComplaintFactory extends PersistentProxyObjectFactory
             'author' => UserFactory::random(),
             'createdAt' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
             'text' => self::faker()->text(),
-            'title' => self::faker()->title(),
+            'title' => self::faker()->words(),
         ];
     }
 
