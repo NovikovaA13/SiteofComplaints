@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\ComplaintRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ComplaintRepository::class)]
 class Complaint
@@ -15,9 +16,12 @@ class Complaint
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank]
+    #[Assert\Length(min: 10,  max: 255)]
     private ?string $title = null;
 
     #[ORM\Column(type: Types::TEXT)]
+    #[Assert\NotBlank]
     private ?string $text = null;
 
     #[ORM\ManyToOne(inversedBy: 'createdAt')]
