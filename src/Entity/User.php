@@ -39,6 +39,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Complaint::class, mappedBy: 'author')]
     private Collection $createdAt;
 
+    #[ORM\Column(length: 255)]
+    private ?string $name = null;
+
     public function __construct()
     {
         $this->createdAt = new ArrayCollection();
@@ -145,6 +148,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $createdAt->setAuthor(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): static
+    {
+        $this->name = $name;
 
         return $this;
     }

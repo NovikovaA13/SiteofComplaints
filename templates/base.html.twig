@@ -12,6 +12,11 @@
         {% endblock %}
     </head>
     <body>
+    <div><a href="{{ path('app_complaint_new') }}">Write new complaint</a>
+        <a href="{{ path('app_complaint_index') }}">Index</a>
+    </div>
+    <div class="container">
         {% block body %}{% endblock %}
+    </div>
     </body>
 </html>

@@ -34,6 +34,7 @@ final class UserFactory extends PersistentProxyObjectFactory
     {
         return [
             'email' => self::faker()->unique()->email(),
+            'name' => self::faker()->unique()->name(),
             'password' => $this->hasherFactory->hashPassword(new User(), 'password'),
             'roles' => ['ROLE_USER'],
         ];

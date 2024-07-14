@@ -3,9 +3,9 @@
 {% block title %}New Complaint{% endblock %}
 
 {% block body %}
-    <h1>Create new Complaint</h1>
+    <div>
+        <h1>Create new Complaint</h1>
 
-    {{ include('complaint/_form.html.twig') }}
-
-    <a href="{{ path('app_complaint_index') }}">back to list</a>
+        {{ include('complaint/_form.html.twig') }}
+    </div>
 {% endblock %}

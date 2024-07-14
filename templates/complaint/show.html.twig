@@ -8,10 +8,6 @@
     <table class="table">
         <tbody>
             <tr>
-                <th>Id</th>
-                <td>{{ complaint.id }}</td>
-            </tr>
-            <tr>
                 <th>Title</th>
                 <td>{{ complaint.title }}</td>
             </tr>
@@ -23,10 +19,12 @@
                 <th>CreatedAt</th>
                 <td>{{ complaint.createdAt ? complaint.createdAt|date('Y-m-d H:i:s') : '' }}</td>
             </tr>
+            <tr>
+                <th>CreatedBy</th>
+                <td>{{ complaint.author.getName() }}</td>
+            </tr>
         </tbody>
     </table>
-
-    <a href="{{ path('app_complaint_index') }}">back to list</a>
 
     <a href="{{ path('app_complaint_edit', {'id': complaint.id}) }}">edit</a>
 

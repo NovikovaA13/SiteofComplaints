@@ -10,6 +10,7 @@
             <tr>
                 <th>Title</th>
                 <th>Text</th>
+                <th>CreatedBy</th>
                 <th>CreatedAt</th>
                 <th>actions</th>
             </tr>
@@ -19,6 +20,7 @@
             <tr>
                 <td>{{ complaint.title }}</td>
                 <td>{{ complaint.text }}</td>
+                <td>{{ complaint.author.getName() }}</td>
                 <td>{{ complaint.createdAt ? complaint.createdAt|date('Y-m-d H:i:s') : '' }}</td>
                 <td>
                     <a href="{{ path('app_complaint_show', {'id': complaint.id}) }}">show</a>
@@ -32,6 +34,5 @@
         {% endfor %}
         </tbody>
     </table>
-
-    <a href="{{ path('app_complaint_new') }}">Create new</a>
+    <div>{{ pagerfanta(complaints) }}</div>
 {% endblock %}
