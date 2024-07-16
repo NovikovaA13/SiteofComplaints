@@ -12,10 +12,16 @@
         {% endblock %}
     </head>
     <body>
-    <div><a href="{{ path('app_complaint_new') }}">Write new complaint</a>
-        <a href="{{ path('app_complaint_index') }}">Index</a>
-    </div>
     <div class="container">
+        <div>
+            <span class="pe-3"><a href="{{ path('index') }}">Index</a></span>
+            {% if is_granted('IS_AUTHENTICATED') %}
+                <a href="{{ path('app_complaint_new') }}">Write new complaint</a>
+                <span class="pl-3"><a href="{{ path('app_logout') }}">Log out</a></span>
+            {% else %}
+                <span class="pl-3"><a href="{{ path('app_login') }}">Log in</a></span>
+            {% endif %}
+        </div>
         {% block body %}{% endblock %}
     </div>
     </body>

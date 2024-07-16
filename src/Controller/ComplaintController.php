@@ -12,31 +12,23 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[Route('/complaint')]
 class ComplaintController extends AbstractController
 {
-    #[Route('/', name: 'app_complaint_index', methods: ['GET'])]
-    public function index(ComplaintRepository $complaintRepository, Request $request): Response
-    {
-        $complaints = Pagerfanta::createForCurrentPageWithMaxPerPage(new QueryAdapter($complaintRepository->getAll()), $request->query->get('page', 1), 10);
-        return $this->render('complaint/index.html.twig', [
-            'complaints' => $complaints,
-        ]);
-    }
-
+    #[IsGranted('IS_AUTHENTICATED')]
     #[Route('/new', name: 'app_complaint_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $complaint = new Complaint();
         $form = $this->createForm(ComplaintType::class, $complaint);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
+            $complaint->setAuthor($this->getUser());
             $entityManager->persist($complaint);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_complaint_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('complaint/new.html.twig', [
@@ -53,6 +45,7 @@ class ComplaintController extends AbstractController
         ]);
     }
 
+    #[IsGranted('ROLE_ADMIN')]
     #[Route('/{id}/edit', name: 'app_complaint_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Complaint $complaint, EntityManagerInterface $entityManager): Response
     {
@@ -62,23 +55,12 @@ class ComplaintController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_complaint_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('complaint/edit.html.twig', [
             'complaint' => $complaint,
             'form' => $form,
         ]);
-    }
-
-    #[Route('/{id}', name: 'app_complaint_delete', methods: ['POST'])]
-    public function delete(Request $request, Complaint $complaint, EntityManagerInterface $entityManager): Response
-    {
-        if ($this->isCsrfTokenValid('delete'.$complaint->getId(), $request->getPayload()->getString('_token'))) {
-            $entityManager->remove($complaint);
-            $entityManager->flush();
-        }
-
-        return $this->redirectToRoute('app_complaint_index', [], Response::HTTP_SEE_OTHER);
     }
 }
