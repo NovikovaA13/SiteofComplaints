@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Enum\ComplaintStatus;
 use App\Repository\ComplaintRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -22,6 +23,7 @@ class Complaint
 
     #[ORM\Column(type: Types::TEXT)]
     #[Assert\NotBlank]
+    #[Assert\Length(min: 10)]
     private ?string $text = null;
 
     #[ORM\ManyToOne(inversedBy: 'createdAt')]
@@ -31,9 +33,13 @@ class Complaint
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
 
+    #[ORM\Column(length: 255)]
+    private ?ComplaintStatus $status = null;
+
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
+        $this->status = ComplaintStatus::INWAITING;
     }
     public function getId(): ?int
     {
@@ -84,6 +90,18 @@ class Complaint
     public function setCreatedAt(\DateTimeImmutable $createdAt): static
     {
         $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getStatus(): ?ComplaintStatus
+    {
+        return $this->status;
+    }
+
+    public function setStatus(ComplaintStatus $status): static
+    {
+        $this->status = $status;
 
         return $this;
     }

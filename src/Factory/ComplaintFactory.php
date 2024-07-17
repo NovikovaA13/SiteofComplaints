@@ -3,6 +3,7 @@
 namespace App\Factory;
 
 use App\Entity\Complaint;
+use App\Enum\ComplaintStatus;
 use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
 
 /**
@@ -28,6 +29,7 @@ final class ComplaintFactory extends PersistentProxyObjectFactory
             'createdAt' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
             'text' => self::faker()->text(),
             'title' => self::faker()->text(50),
+            'status' => self::faker()->randomElement(ComplaintStatus::cases())
         ];
     }
 

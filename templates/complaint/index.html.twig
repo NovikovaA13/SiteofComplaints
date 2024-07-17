@@ -12,6 +12,9 @@
                 <th>Text</th>
                 <th>CreatedBy</th>
                 <th>CreatedAt</th>
+                {% if is_granted('ROLE_ADMIN') %}
+                    <th>Status</th>
+                {% endif %}
                 <th>actions</th>
             </tr>
         </thead>
@@ -22,6 +25,9 @@
                 <td>{{ complaint.text }}</td>
                 <td>{{ complaint.author.getName() }}</td>
                 <td>{{ complaint.createdAt ? complaint.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                {% if is_granted('ROLE_ADMIN') %}
+                    <td>{{ complaint.status.getLabel() }}</td>
+                {% endif %}
                 <td>
                     <a href="{{ path('app_complaint_show', {'id': complaint.id}) }}">show</a>
                     {% if is_granted('ROLE_ADMIN') %}

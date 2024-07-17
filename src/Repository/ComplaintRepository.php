@@ -3,24 +3,34 @@
 namespace App\Repository;
 
 use App\Entity\Complaint;
+use App\Enum\ComplaintStatus;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
-use Pagerfanta\Doctrine\ORM\QueryAdapter;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 /**
  * @extends ServiceEntityRepository<Complaint>
  */
 class ComplaintRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    private AuthorizationCheckerInterface $checker;
+    public function __construct(ManagerRegistry $registry, AuthorizationCheckerInterface $checker)
     {
+        $this->checker = $checker;
         parent::__construct($registry, Complaint::class);
     }
 
     public function getAll(): QueryBuilder
     {
-       return $this->createQueryBuilder('q');
+        $builder = $this->createQueryBuilder('q');
+
+        if (!$this->checker->isGranted('ROLE_ADMIN')) {
+            $builder->where('q.status = :status')
+                ->setParameter('status', ComplaintStatus::ACCEPTED);
+        }
+
+        return $builder;
     }
 
 //    /**
