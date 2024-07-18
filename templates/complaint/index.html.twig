@@ -22,7 +22,7 @@
         {% for complaint in complaints %}
             <tr>
                 <td>{{ complaint.title }}</td>
-                <td>{{ complaint.text }}</td>
+                <td>{{ complaint.text|firstWords(20) ~ ' ...'}}</td>
                 <td>{{ complaint.author.getName() }}</td>
                 <td>{{ complaint.createdAt ? complaint.createdAt|date('Y-m-d H:i:s') : '' }}</td>
                 {% if is_granted('ROLE_ADMIN') %}
